@@ -1,0 +1,35 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+table,
+tr,
+td {
+  width: 600px;
+  height: 200px;
+  border-collapse: collapse;
+}
+td:nth-child(n) {
+  border-bottom: 2px solid black;
+  border-collapse: collapse;
+}
+td:hover {
+  background-color: whitesmoke;
+}
+td:nth-child(n) {
+  border-right: 2px solid black;
+}
+tr:last-child td:nth-child(n) {
+  border-bottom: 2px solid transparent;
+}
+td:last-child {
+  border-right: 2px solid transparent;
+}
