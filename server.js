@@ -39,6 +39,10 @@ server.listen(3000);
 
 const io = new Server(server);
 
-io.on("connection", () => {
+io.on("connection", (socket) => {
   console.log("connected");
+
+  socket.on('moved',(index)=>{
+    socket.broadcast.emit('update',index);
+  })
 });
