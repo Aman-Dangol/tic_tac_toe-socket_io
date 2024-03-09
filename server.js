@@ -36,4 +36,7 @@ io.on("connection", (socket) => {
   socket.on("join-room",(roomName)=>{
     socket.join(roomName);
   })
+  socket.on("moved",index =>{
+    socket.broadcast.emit('other-moved',index);
+  })
 });

@@ -16,6 +16,7 @@ tableCells.forEach((ele) => {
     }
     ele.style.backgroundColor = "red";
     getid = ele.id;
+    socket.emit("moved", getid);
   };
   id++;
 });
@@ -27,12 +28,16 @@ form.addEventListener("submit", (e) => {
     alert("room canot be empty");
     return;
   }
-  socket.emit("join-room",roomnum);
+  // if the socket name is not empty then let this socket join a room
+  socket.emit("join-room", roomnum);
 });
-
 
 // socket code suru
 
 let socket = io();
 
-
+socket.on("other-moved", (index) => {
+  let x = document.getElementById(index);
+  console.log(x);
+  x.style.backgroundColor = "blue";
+});
