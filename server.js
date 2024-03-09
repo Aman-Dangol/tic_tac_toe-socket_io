@@ -35,14 +35,17 @@ io.on("connection", (socket) => {
   // join room
 
   socket.on("join-room", (roomName) => {
-    socket.join(roomName);
     if (!room.hasOwnProperty(roomName)) {
       room[roomName] = 1;
       console.log(room);
     } else {
-      console.log("here");
+      if (room[roomName] == 2) {
+        console.log("here");
+        socket.emit("not-avail", roomName);
+        return;
+      }
+      socket.join(roomName);
       room[roomName] = 2;
-      console.log(room);
     }
   });
   socket.on("moved", (index) => {

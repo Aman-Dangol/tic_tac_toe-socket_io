@@ -41,3 +41,7 @@ socket.on("other-moved", (index) => {
   console.log(x);
   x.style.backgroundColor = "blue";
 });
+
+socket.on("not-avail", (roomName) => {
+  alert(`${roomName} is full`);
+});
