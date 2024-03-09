@@ -26,6 +26,7 @@ function responder(fileName, contentHeader, res) {
   });
 }
 
+let room = {};
 server.listen(3000);
 
 const io = new Server(server);
@@ -33,10 +34,18 @@ const io = new Server(server);
 io.on("connection", (socket) => {
   // join room
 
-  socket.on("join-room",(roomName)=>{
+  socket.on("join-room", (roomName) => {
     socket.join(roomName);
-  })
-  socket.on("moved",index =>{
-    socket.broadcast.emit('other-moved',index);
-  })
+    if (!room.hasOwnProperty(roomName)) {
+      room[roomName] = 1;
+      console.log(room);
+    } else {
+      console.log("here");
+      room[roomName] = 2;
+      console.log(room);
+    }
+  });
+  socket.on("moved", (index) => {
+    socket.broadcast.emit("other-moved", index);
+  });
 });
