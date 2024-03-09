@@ -1,3 +1,5 @@
+import { io } from "https://cdn.socket.io/4.7.4/socket.io.esm.min.js";
+
 let tableCells = document.querySelectorAll("td");
 let form = document.querySelector("form");
 let room = document.getElementById("inputField");
@@ -8,7 +10,7 @@ let turn;
 tableCells.forEach((ele) => {
   ele.id = id;
   ele.onclick = () => {
-    if (!roomnum) {
+    if (!roomnum || /^\s*$/.test(roomnum)) {
       alert("join rooom first");
       return;
     }
@@ -21,7 +23,16 @@ tableCells.forEach((ele) => {
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   roomnum = room.value;
-  if (room.value == "") {
-    alert("join room first");
+  if (/^\s*$/.test(roomnum)) {
+    alert("room canot be empty");
+    return;
   }
+  socket.emit("join-room",roomnum);
 });
+
+
+// socket code suru
+
+let socket = io();
+
+
