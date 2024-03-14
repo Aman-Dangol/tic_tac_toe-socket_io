@@ -53,6 +53,6 @@ socket.on("message",msg =>{
 })
 
 leaveButton.onclick = ()=>{
-  
+  roomName = room.value;  
   socket.emit("leave-room",roomName);
 }

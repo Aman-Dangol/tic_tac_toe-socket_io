@@ -36,13 +36,13 @@ io.on("connection", (socket) => {
   // join room
   socket.on("join-room", (roomName) => {
     let roomArray = Array.from(socket.rooms);
-console.log(roomArray);
+    console.log(roomArray);
     if (socket.rooms.has(roomName)) {
       io.emit("message","already-joined the room");
       return;
     }
     if (socket.rooms.size == 2) {
-      io.emit("message","leave current room first");
+      io.emit("message",`leave "${roomArray[1]}" room first`);
       return;
     }
     if (!room.hasOwnProperty(roomName)) {
