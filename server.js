@@ -38,11 +38,11 @@ io.on("connection", (socket) => {
     let roomArray = Array.from(socket.rooms);
     console.log(roomArray);
     if (socket.rooms.has(roomName)) {
-      io.emit("message","already-joined the room");
+      io.emit("message", "already-joined the room");
       return;
     }
     if (socket.rooms.size == 2) {
-      io.emit("message",`leave "${roomArray[1]}" room first`);
+      io.emit("message", `leave "${roomArray[1]}" room first`);
       return;
     }
     if (!room.hasOwnProperty(roomName)) {
@@ -61,8 +61,12 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("other-moved", index);
   });
 
-  socket.on('leave-room',roomName =>{
+  socket.on("leave-room", (roomName) => {
     socket.leave(roomName);
-    io.to(socket.id).emit("message","room left");
-  })
+    room[roomName] -= 1;
+    if (room[roomName] <= 0) {
+      delete room[roomName];
+    }
+    io.to(socket.id).emit("message", "room left");
+  });
 });
