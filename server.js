@@ -2,6 +2,7 @@ const http = require("http");
 const fs = require("fs");
 const url = require("url");
 const { Server } = require("socket.io");
+const { log } = require("console");
 
 const server = http.createServer((req, res) => {
   let parsedUrl = url.parse(req.url);
@@ -33,22 +34,35 @@ const io = new Server(server);
 
 io.on("connection", (socket) => {
   // join room
-
   socket.on("join-room", (roomName) => {
+    let roomArray = Array.from(socket.rooms);
+console.log(roomArray);
+    if (socket.rooms.has(roomName)) {
+      io.emit("message","already-joined the room");
+      return;
+    }
+    if (socket.rooms.size == 2) {
+      io.emit("message","leave current room first");
+      return;
+    }
     if (!room.hasOwnProperty(roomName)) {
       room[roomName] = 1;
-      console.log(room);
+      socket.join(roomName);
+      io.to(roomName).emit("message", "waiting for player 2");
     } else {
       if (room[roomName] == 2) {
-        console.log("here");
         socket.emit("not-avail", roomName);
         return;
       }
-      socket.join(roomName);
-      room[roomName] = 2;
+      room[roomName]++;
     }
   });
   socket.on("moved", (index) => {
     socket.broadcast.emit("other-moved", index);
   });
+
+  socket.on('leave-room',roomName =>{
+    socket.leave(roomName);
+    io.to(socket.id).emit("message","room left");
+  })
 });
