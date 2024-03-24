@@ -34,10 +34,8 @@ const io = new Server(server);
 
 io.on("connection", (socket) => {
   let roomArray = Array.from(socket.rooms);
-  console.log(roomArray);
   socket.on("join-room", (roomName) => {
     if (socket.rooms.has(roomName)) {
-      console.log(socket.rooms);
       io.emit("message", "already-joined the room");
       return;
     }
@@ -51,16 +49,13 @@ io.on("connection", (socket) => {
       room[roomName].push(socket.id);
       socket.join(roomName);
       io.to(roomName).emit("message", "waiting for player 2");
-      console.log(room[roomName].length);
     } else {
-      console.log(room[roomName].length);
       if (room[roomName].length == 2) {
         socket.emit("not-avail", roomName);
         return;
       }
       room[roomName].push(socket.id);
       socket.join(roomName);
-      console.log(room);
       io.to(socket.id).emit("message", "room joined");
       roomArray = Array.from(socket.rooms);
       socket.to(roomName).emit("message", "player 2 has joined");
@@ -73,7 +68,6 @@ io.on("connection", (socket) => {
   socket.on("leave-room", (roomName) => {
     socket.leave(roomName);
     removeSocketFromRoom(socket.id);
-    console.log(room);
     io.to(socket.id).emit("message", "room left");
     io.to(roomName).emit("message", "has left the room");
   });
