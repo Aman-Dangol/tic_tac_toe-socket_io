@@ -47,12 +47,13 @@ socket.on("not-avail", (roomName) => {
   alert(`${roomName} is full`);
 });
 
-
-socket.on("message",msg =>{
+socket.on("message", (msg) => {
   alert(msg);
-})
+});
 
-leaveButton.onclick = ()=>{
-  roomName = room.value;  
-  socket.emit("leave-room",roomName);
-}
+leaveButton.onclick = () => {
+  roomName = room.value;
+  socket.emit("leave-room", roomName);
+};
+
+socket.emit("disconnect", roomName);

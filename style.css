@@ -2,17 +2,23 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  outline: none;
 }
 
+body {
+  background-color: black;
+  color: white;
+  overflow-x: hidden;
+}
 main {
   height: 100vh;
+  --border-color: white;
 }
 
-
-form{
+form {
   display: inline;
 }
-.game{
+.game {
   width: 100vw;
   height: 100vh;
   display: flex;
@@ -27,14 +33,14 @@ td {
   border-collapse: collapse;
 }
 td:nth-child(n) {
-  border-bottom: 2px solid black;
+  border-bottom: 2px solid var(--border-color);
   border-collapse: collapse;
 }
 td:hover {
-  background-color: whitesmoke;
+  background-color: rgb(48, 48, 48);
 }
 td:nth-child(n) {
-  border-right: 2px solid black;
+  border-right: 2px solid var(--border-color);
 }
 tr:last-child td:nth-child(n) {
   border-bottom: 2px solid transparent;
