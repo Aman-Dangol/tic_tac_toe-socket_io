@@ -17,7 +17,7 @@ tableCells.forEach((ele) => {
     }
     ele.style.backgroundColor = "red";
     getid = ele.id;
-    socket.emit("moved", getid);
+    socket.emit("moved", getid,roomName);
   };
   id++;
 });

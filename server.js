@@ -68,8 +68,8 @@ io.on("connection", (socket) => {
     }
   });
   // send sockets position between each other
-  socket.on("moved", (index) => {
-    socket.broadcast.emit("other-moved", index);
+  socket.on("moved", (index, roomName) => {
+    socket.to(roomName).emit("other-moved", index);
   });
 
   socket.on("leave-room", (roomName) => {
