@@ -21,6 +21,10 @@ tableCells.forEach((ele) => {
     alert(message);
       return;
     }
+    if (ele.style.backgroundColor == "red" || ele.style.backgroundColor == "blue") {
+      alert("invalid move");
+      return;
+    }
     ele.style.backgroundColor = "red";
     getid = ele.id;
     turn = false;
