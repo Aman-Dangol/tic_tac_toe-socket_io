@@ -35,25 +35,31 @@ const io = new Server(server);
 io.on("connection", (socket) => {
   let roomArray = Array.from(socket.rooms);
   socket.on("join-room", (roomName) => {
+    // if player has already joined THAT room
     if (socket.rooms.has(roomName)) {
       io.emit("message", "already-joined the room");
       return;
     }
+    // if the player has already joiend another room
     if (socket.rooms.size == 2) {
       roomArray = Array.from(socket.rooms);
       io.emit("message", `leave "${roomArray[1]}" room first`);
       return;
     }
+    // if the room doesnt exist create that room and join the socket in THAT room
     if (!room.hasOwnProperty(roomName)) {
       room[roomName] = [];
       room[roomName].push(socket.id);
       socket.join(roomName);
       io.to(roomName).emit("message", "waiting for player 2");
-    } else {
+    }
+    // if the room exist but is already full (max = 2 people)
+    else {
       if (room[roomName].length == 2) {
         socket.emit("not-avail", roomName);
         return;
       }
+      // if room exist but isnt full , meaning only one socket is in the room
       room[roomName].push(socket.id);
       socket.join(roomName);
       io.to(socket.id).emit("message", "room joined");
@@ -61,6 +67,7 @@ io.on("connection", (socket) => {
       socket.to(roomName).emit("message", "player 2 has joined");
     }
   });
+  // send sockets position between each other
   socket.on("moved", (index) => {
     socket.broadcast.emit("other-moved", index);
   });
