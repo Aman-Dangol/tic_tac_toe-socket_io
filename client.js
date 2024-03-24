@@ -7,17 +7,24 @@ let leaveButton = document.getElementById("leave");
 let roomName;
 let id = 1;
 let getid = "";
-let turn;
+let message=""
+let turn = false;
 tableCells.forEach((ele) => {
   ele.id = id;
   ele.onclick = () => {
+    console.log(roomName);
     if (!roomName || /^\s*$/.test(roomName)) {
       alert("join rooom first");
       return;
     }
+    if (!turn) {
+    alert(message);
+      return;
+    }
     ele.style.backgroundColor = "red";
     getid = ele.id;
-    socket.emit("moved", getid,roomName);
+    turn = false;
+    socket.emit("moved", getid,roomName,true);
   };
   id++;
 });
@@ -37,18 +44,25 @@ form.addEventListener("submit", (e) => {
 
 let socket = io();
 
-socket.on("other-moved", (index) => {
+socket.on("other-moved", (index,isturn) => {
   let x = document.getElementById(index);
+  turn = isturn;
   console.log(x);
   x.style.backgroundColor = "blue";
 });
 
-socket.on("not-avail", (roomName) => {
-  alert(`${roomName} is full`);
+socket.on("not-avail", (roomN) => {
+  alert(`${roomN} is full`);
+  roomName=false;
 });
 
 socket.on("message", (msg) => {
   alert(msg);
+  message = msg;
+});
+socket.on("start-playing", (msg,isTurn) => {
+  alert(msg);
+  turn=isTurn;
 });
 
 leaveButton.onclick = () => {
