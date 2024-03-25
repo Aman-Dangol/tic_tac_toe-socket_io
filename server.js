@@ -64,12 +64,12 @@ io.on("connection", (socket) => {
       socket.join(roomName);
       io.to(socket.id).emit("message", "room joined");
       roomArray = Array.from(socket.rooms);
-      socket.to(roomName).emit("start-playing", "player 2 has joined",true);
+      socket.to(roomName).emit("start-playing", "player 2 has joined", true);
     }
   });
   // send sockets position between each other
-  socket.on("moved", (index, roomName,turn) => {
-    socket.to(roomName).emit("other-moved", index,turn);
+  socket.on("moved", (index, roomName, turn) => {
+    socket.to(roomName).emit("other-moved", index, turn);
   });
 
   socket.on("leave-room", (roomName) => {
@@ -81,6 +81,11 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     removeSocketFromRoom(socket.id);
+  });
+
+  socket.on("game-over", () => {
+    roomArray = Array.from(socket.rooms);
+    socket.to(roomArray[1]).emit("message", "you lose 😟");
   });
 });
 

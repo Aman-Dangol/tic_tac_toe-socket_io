@@ -9,10 +9,14 @@ let id = 1;
 let getid = "";
 let message = "";
 let turn = false;
+let win = false;
 tableCells.forEach((ele) => {
   ele.id = id;
   ele.onclick = () => {
-    console.log(roomName);
+    if (win) {
+      alert("win");
+      return;
+    }
     if (!roomName || /^\s*$/.test(roomName)) {
       alert("join rooom first");
       return;
@@ -33,6 +37,9 @@ tableCells.forEach((ele) => {
     getid = ele.id;
     turn = false;
     socket.emit("moved", getid, roomName, true);
+    if (win) {
+      socket.emit("game-over");
+    }
   };
   id++;
 });
@@ -108,6 +115,7 @@ function checkWin() {
       tableCells[4].style.backgroundColor == "red" &&
       tableCells[6].style.backgroundColor == "red")
   ) {
-    alert("you win");
+    alert("you win 🎉");
+    win = true;
   }
 }
