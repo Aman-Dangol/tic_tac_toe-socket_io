@@ -7,7 +7,7 @@ let leaveButton = document.getElementById("leave");
 let roomName;
 let id = 1;
 let getid = "";
-let message=""
+let message = "";
 let turn = false;
 tableCells.forEach((ele) => {
   ele.id = id;
@@ -18,17 +18,21 @@ tableCells.forEach((ele) => {
       return;
     }
     if (!turn) {
-    alert(message);
+      alert(message);
       return;
     }
-    if (ele.style.backgroundColor == "red" || ele.style.backgroundColor == "blue") {
+    if (
+      ele.style.backgroundColor == "red" ||
+      ele.style.backgroundColor == "blue"
+    ) {
       alert("invalid move");
       return;
     }
     ele.style.backgroundColor = "red";
+    checkWin();
     getid = ele.id;
     turn = false;
-    socket.emit("moved", getid,roomName,true);
+    socket.emit("moved", getid, roomName, true);
   };
   id++;
 });
@@ -48,7 +52,7 @@ form.addEventListener("submit", (e) => {
 
 let socket = io();
 
-socket.on("other-moved", (index,isturn) => {
+socket.on("other-moved", (index, isturn) => {
   let x = document.getElementById(index);
   turn = isturn;
   console.log(x);
@@ -57,16 +61,16 @@ socket.on("other-moved", (index,isturn) => {
 
 socket.on("not-avail", (roomN) => {
   alert(`${roomN} is full`);
-  roomName=false;
+  roomName = false;
 });
 
 socket.on("message", (msg) => {
   alert(msg);
   message = msg;
 });
-socket.on("start-playing", (msg,isTurn) => {
+socket.on("start-playing", (msg, isTurn) => {
   alert(msg);
-  turn=isTurn;
+  turn = isTurn;
 });
 
 leaveButton.onclick = () => {
@@ -74,4 +78,36 @@ leaveButton.onclick = () => {
   socket.emit("leave-room", roomName);
 };
 
-socket.emit("disconnect", roomName);
+function checkWin() {
+  if (
+    (tableCells[0].style.backgroundColor == "red" &&
+      tableCells[1].style.backgroundColor == "red" &&
+      tableCells[2].style.backgroundColor == "red") ||
+    (tableCells[3].style.backgroundColor == "red" &&
+      tableCells[4].style.backgroundColor == "red" &&
+      tableCells[5].style.backgroundColor == "red") ||
+    (tableCells[6].style.backgroundColor == "red" &&
+      tableCells[7].style.backgroundColor == "red" &&
+      tableCells[8].style.backgroundColor == "red") ||
+    (tableCells[0].style.backgroundColor == "red" &&
+      tableCells[3].style.backgroundColor == "red" &&
+      tableCells[6].style.backgroundColor == "red") ||
+    (tableCells[1].style.backgroundColor == "red" &&
+      tableCells[4].style.backgroundColor == "red" &&
+      tableCells[7].style.backgroundColor == "red") ||
+    (tableCells[2].style.backgroundColor == "red" &&
+      tableCells[5].style.backgroundColor == "red" &&
+      tableCells[8].style.backgroundColor == "red") ||
+    (tableCells[0].style.backgroundColor == "red" &&
+      tableCells[3].style.backgroundColor == "red" &&
+      tableCells[6].style.backgroundColor == "red") ||
+    (tableCells[0].style.backgroundColor == "red" &&
+      tableCells[4].style.backgroundColor == "red" &&
+      tableCells[8].style.backgroundColor == "red") ||
+    (tableCells[2].style.backgroundColor == "red" &&
+      tableCells[4].style.backgroundColor == "red" &&
+      tableCells[6].style.backgroundColor == "red")
+  ) {
+    alert("you win");
+  }
+}
