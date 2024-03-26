@@ -37,7 +37,7 @@ io.on("connection", (socket) => {
   socket.on("join-room", (roomName) => {
     // if player has already joined THAT room
     if (socket.rooms.has(roomName)) {
-      io.emit("message", "already-joined the room");
+      io.to(socket.id).emit("message", "already-joined the room");
       return;
     }
     // if the player has already joiend another room
@@ -85,7 +85,7 @@ io.on("connection", (socket) => {
 
   socket.on("game-over", () => {
     roomArray = Array.from(socket.rooms);
-    socket.to(roomArray[1]).emit("message", "you lose 😟");
+    socket.to(roomArray[1]).emit("message", "you lose 😟",true);
   });
 });
 

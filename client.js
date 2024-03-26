@@ -9,12 +9,12 @@ let id = 1;
 let getid = "";
 let message = "";
 let turn = false;
-let win = false;
+let gameOver = false;
 tableCells.forEach((ele) => {
   ele.id = id;
   ele.onclick = () => {
-    if (win) {
-      alert("win");
+    if (gameOver) {
+      alert(" you gameOver");
       return;
     }
     if (!roomName || /^\s*$/.test(roomName)) {
@@ -33,13 +33,10 @@ tableCells.forEach((ele) => {
       return;
     }
     ele.style.backgroundColor = "red";
-    checkWin();
+    checkgameOver();
     getid = ele.id;
     turn = false;
     socket.emit("moved", getid, roomName, true);
-    if (win) {
-      socket.emit("game-over");
-    }
   };
   id++;
 });
@@ -71,9 +68,10 @@ socket.on("not-avail", (roomN) => {
   roomName = false;
 });
 
-socket.on("message", (msg) => {
+socket.on("message", (msg,state=false) => {
   alert(msg);
   message = msg;
+  gameOver = state;
 });
 socket.on("start-playing", (msg, isTurn) => {
   alert(msg);
@@ -85,7 +83,7 @@ leaveButton.onclick = () => {
   socket.emit("leave-room", roomName);
 };
 
-function checkWin() {
+function checkgameOver() {
   if (
     (tableCells[0].style.backgroundColor == "red" &&
       tableCells[1].style.backgroundColor == "red" &&
@@ -115,7 +113,8 @@ function checkWin() {
       tableCells[4].style.backgroundColor == "red" &&
       tableCells[6].style.backgroundColor == "red")
   ) {
-    alert("you win 🎉");
-    win = true;
+    gameOver = true;
+    socket.emit("game-over");
+    alert("you gameOver 🎉");
   }
 }
