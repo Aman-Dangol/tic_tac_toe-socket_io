@@ -81,11 +81,12 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     removeSocketFromRoom(socket.id);
+    io.to(key).emit("message", "player 2 has been disconnected");
   });
 
   socket.on("game-over", () => {
     roomArray = Array.from(socket.rooms);
-    socket.to(roomArray[1]).emit("message", "you lose 😟",true);
+    socket.to(roomArray[1]).emit("message", "you lose 😟", true);
   });
 });
 
@@ -98,6 +99,7 @@ function removeSocketFromRoom(id) {
         delete room[key];
         return;
       }
+      return key;
     }
   }
 }
