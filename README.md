@@ -1,6 +1,6 @@
-#INSTRUCTIONS\n
--> make sure both player are connect to same network\n
--> run node server.js\n
--> share the host ip address\n
-->enter room name (one room can only have two players)\n
+#INSTRUCTIONS<br>
+-> make sure both player are connect to same network<br>
+-> run node server.js<br>
+-> share the host ip address<br>
+->enter room name (one room can only have two players)<br>
   ENJOY !! 🎉🎉
